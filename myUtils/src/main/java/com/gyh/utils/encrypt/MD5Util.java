@@ -7,7 +7,7 @@ import java.security.MessageDigest;
  * @author tfq 
  * @datetime 2011-10-13 
  */  
-public class MD5Util2 {  
+public class MD5Util {  
   
     /*** 
      * MD5加码 生成32位md5码 
