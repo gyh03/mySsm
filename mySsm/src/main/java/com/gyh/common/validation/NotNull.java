@@ -1,4 +1,4 @@
-package com.gyh.validation;
+package com.gyh.common.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsString {
-	int minLength();
-	int maxLength();
+public @interface NotNull {
 }

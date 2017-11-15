@@ -1,4 +1,4 @@
-package com.gyh.validation;
+package com.gyh.common.validation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
