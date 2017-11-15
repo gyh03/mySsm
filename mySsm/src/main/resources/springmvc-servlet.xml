@@ -61,5 +61,4 @@
 	</aop:aspectj-autoproxy>
 	<bean id="indexAspect" class="com.gyh.aspect.IndexAspect" />
 
-
 </beans>  

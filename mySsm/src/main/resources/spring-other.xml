@@ -1,20 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans   
-          http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context    
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd ">
 
-	<!-- 引入配置文件 -->
-	<bean id="propertyConfigurer"
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="classpath:database.properties" />
-	</bean>
-	<!-- <context:property-placeholder location="classpath:database.properties" 
-		ignore-unresolvable="true" /> -->
+	<!-- 引入配置文件 ：java使用@Value("#{prop['key']}")获取，xml使用#{prop['key']}获取 -->
+	<bean id="prop" class="org.springframework.beans.factory.config.PropertiesFactoryBean">  
+        <property name="locations">  
+            <list>  
+                <value>classpath:database.properties</value>  
+            </list>  
+        </property>  
+    </bean>
+    <!-- 第二种 ：java使用@Value("${key}")获取（不可以??），xml使用${key}获取 --> 
+   	<!-- <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">  
+        <property name="location">  
+        <value>classpath:database.properties</value>  
+        </property>  
+    </bean> -->   
+    <!-- 第三种 ：java使用@Value("${key}")获取（不可以??），xml使用${key}获取 --> 
+    <!-- <context:property-placeholder location="classpath:database.properties"/> -->
+	<!-- 与上面的配置等价，下面的更容易理解 -->  
+	<!-- <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">  
+	    <property name="locations"> 
+	    	PropertyPlaceholderConfigurer类中有个locations属性，接收的是一个数组，即我们可以在下面配好多个properties文件  
+	        <array>  
+	            <value>classpath:database.properties</value>  
+	        </array>  
+	    </property>  
+	</bean> -->
 
 
 	<!-- 引入其他配置文件 -->
 	<import resource="mybatis.xml" />
 	<!-- <import resource="mongodb.xml" /> -->
-	<!-- <import resource="cluster-redis.xml" /> -->
+	
+	<!-- 引入redis。推荐使用集群redis，不需要spring-data-redis的maven依赖 ，使用redis原生jar包操作，更简单，
+		而且集群好处多多，如可以分布式存储数据，主从复制，避免单点服务宕机危险等 
+		(集群中的某节点挂掉之后，集群会自动将此节点下的数据复制到其他节点，槽位也转移到其他节点，这样就不会影响redis的正常读写) -->
+	<import resource="redis-cluster.xml" />
+	<!-- <import resource="redis-single.xml" /> -->
 </beans>

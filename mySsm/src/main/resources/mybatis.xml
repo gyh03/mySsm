@@ -23,20 +23,20 @@
         
 	<!-- c3p0连接池配置 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-		<property name="driverClass" value="${jdbc.driver}" />
-		<property name="jdbcUrl" value="${jdbc.url}" />
-		<property name="user" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
-		<property name="minPoolSize" value="${c3p0.miniPoolSize}" />
-		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
-		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
-		<property name="maxIdleTime" value="${c3p0.maxIdleTime}" />
-		<property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
-		<property name="acquireRetryAttempts" value="${c3p0.acquireRetryAttempts}" />
-		<property name="acquireRetryDelay" value="${c3p0.acquireRetryDelay}" />
-		<property name="testConnectionOnCheckin" value="${c3p0.testConnectionOnCheckin}" />
-		<property name="idleConnectionTestPeriod" value="${c3p0.idleConnectionTestPeriod}" />
-		<property name="checkoutTimeout" value="${c3p0.checkoutTimeout}" />
+		<property name="driverClass" value="#{prop['jdbc.driver']}" />
+		<property name="jdbcUrl" value="#{prop['jdbc.url']}" />
+		<property name="user" value="#{prop['jdbc.username']}" />
+		<property name="password" value="#{prop['jdbc.password']}" />
+		<property name="minPoolSize" value="#{prop['c3p0.miniPoolSize']}" />
+		<property name="maxPoolSize" value="#{prop['c3p0.maxPoolSize']}" />
+		<property name="initialPoolSize" value="#{prop['c3p0.initialPoolSize']}" />
+		<property name="maxIdleTime" value="#{prop['c3p0.maxIdleTime']}" />
+		<property name="acquireIncrement" value="#{prop['c3p0.acquireIncrement']}" />
+		<property name="acquireRetryAttempts" value="#{prop['c3p0.acquireRetryAttempts']}" />
+		<property name="acquireRetryDelay" value="#{prop['c3p0.acquireRetryDelay']}" />
+		<property name="testConnectionOnCheckin" value="#{prop['c3p0.testConnectionOnCheckin']}" />
+		<property name="idleConnectionTestPeriod" value="#{prop['c3p0.idleConnectionTestPeriod']}" />
+		<property name="checkoutTimeout" value="#{prop['c3p0.checkoutTimeout']}" />
 		<property name="autoCommitOnClose" value="false" />
 		<property name="preferredTestQuery" value="select 1 from c3p0TestTable" />
 	</bean>
@@ -81,30 +81,30 @@
 	<!-- 其他连接池配置 -->
 	<!-- dbcp连接池配置 -->
 	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
-		destroy-method="close"> <property name="driverClassName" value="${jdbc.driver}" 
-		/> <property name="url" value="${jdbc.url}" /> <property name="username" 
-		value="${jdbc.username}" /> <property name="password" value="${jdbc.password}" 
-		/> <property name="initialSize" value="${dbcp.initialSize}"></property> <property 
-		name="maxActive" value="${dbcp.maxActive}"></property> <property name="maxIdle" 
-		value="${dbcp.maxIdle}"></property> <property name="minIdle" value="${dbcp.minIdle}"></property> 
-		<property name="maxWait" value="${dbcp.maxWait}"></property> </bean> -->
+		destroy-method="close"> <property name="driverClassName" value="#{prop['jdbc.driver']}" 
+		/> <property name="url" value="#{prop['jdbc.url']}" /> <property name="username" 
+		value="#{prop['jdbc.username']}" /> <property name="password" value="#{prop['jdbc.password']}" 
+		/> <property name="initialSize" value="#{prop['dbcp.initialSize']}"></property> <property 
+		name="maxActive" value="#{prop['dbcp.maxActive']}"></property> <property name="maxIdle" 
+		value="#{prop['dbcp.maxIdle']}"></property> <property name="minIdle" value="#{prop['dbcp.minIdle']}"></property> 
+		<property name="maxWait" value="#{prop['dbcp.maxWait']}"></property> </bean> -->
 	<!-- proxool连接池配置 -->
 	<!-- <bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource"> 
-		<property name="driver" value="${jdbc.driver}" /> <property name="driverUrl" 
-		value="${jdbc.url}" /> <property name="user" value="${jdbc.user}" /> <property 
-		name="password" value="${jdbc.password}" /> 测试的SQL执行语句 <property name="houseKeepingTestSql" 
-		value="select 1 from dual" /> <property name="prototypeCount" value="${proxool.prototypeCount}" 
-		/> <property name="houseKeepingSleepTime" value="${proxool.houseKeepingSleepTime}" 
-		/> <property name="maximumActiveTime" value="${proxool.maximumActiveTime}" 
-		/> <property name="maximumConnectionLifetime" value="${proxool.maximumConnectionLifetime}" 
-		/> <property name="minimumConnectionCount" value="${proxool.minimumConnectionCount}" 
-		/> <property name="maximumConnectionCount" value="${proxool.maximumConnectionCount}" 
-		/> <property name="simultaneousBuildThrottle" value="${proxool.simultaneousBuildThrottle}" 
+		<property name="driver" value="#{prop['jdbc.driver']}" /> <property name="driverUrl" 
+		value="#{prop['jdbc.url']}" /> <property name="user" value="#{prop['jdbc.user']}" /> <property 
+		name="password" value="#{prop['jdbc.password']}" /> 测试的SQL执行语句 <property name="houseKeepingTestSql" 
+		value="select 1 from dual" /> <property name="prototypeCount" value="#{prop['proxool.prototypeCount']}" 
+		/> <property name="houseKeepingSleepTime" value="#{prop['proxool.houseKeepingSleepTime']}" 
+		/> <property name="maximumActiveTime" value="#{prop['proxool.maximumActiveTime']}" 
+		/> <property name="maximumConnectionLifetime" value="#{prop['proxool.maximumConnectionLifetime']}" 
+		/> <property name="minimumConnectionCount" value="#{prop['proxool.minimumConnectionCount']}" 
+		/> <property name="maximumConnectionCount" value="#{prop['proxool.maximumConnectionCount']}" 
+		/> <property name="simultaneousBuildThrottle" value="#{prop['proxool.simultaneousBuildThrottle']}" 
 		/> </bean> -->
 	<!-- druid连接池配置 -->
 	<!-- <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"> 
-		<property name="driverClassName" value="${jdbc.driver}" /> <property name="url" 
-		value="${jdbc.url}" /> <property name="username" value="${jdbc.username}" 
+		<property name="driverClassName" value="#{prop['jdbc.driver']}" /> <property name="url" 
+		value="#{prop['jdbc.url']}" /> <property name="username" value="#{prop['jdbc.username']}" 
 		/> druid连接池密码必须使用阿里自己的加密算法加密后的 <property name="password" value="bNVOqb7WKLX5Bjnw+LMv92taj25KOxDimXxILPQjw42wgv+1lHzOH8kr97xDwWdhpY67QuYCS7sWN4W46YbkFA==" 
 		/> 配置初始化大小、最小、最大 <property name="initialSize" value="1" /> <property name="minIdle" 
 		value="1" /> <property name="maxActive" value="10" /> 配置获取连接等待超时的时间 <property 
