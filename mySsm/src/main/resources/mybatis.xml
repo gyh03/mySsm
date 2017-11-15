@@ -1,13 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE configuration 
-    PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-3.0.xsd
+        http://www.springframework.org/schema/task 
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd
+        http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+        
+	<!-- c3p0连接池配置 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driver}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="minPoolSize" value="${c3p0.miniPoolSize}" />
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}" />
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}" />
+		<property name="maxIdleTime" value="${c3p0.maxIdleTime}" />
+		<property name="acquireIncrement" value="${c3p0.acquireIncrement}" />
+		<property name="acquireRetryAttempts" value="${c3p0.acquireRetryAttempts}" />
+		<property name="acquireRetryDelay" value="${c3p0.acquireRetryDelay}" />
+		<property name="testConnectionOnCheckin" value="${c3p0.testConnectionOnCheckin}" />
+		<property name="idleConnectionTestPeriod" value="${c3p0.idleConnectionTestPeriod}" />
+		<property name="checkoutTimeout" value="${c3p0.checkoutTimeout}" />
+		<property name="autoCommitOnClose" value="false" />
+		<property name="preferredTestQuery" value="select 1 from c3p0TestTable" />
+	</bean>
 
-<configuration>
-	<!-- 配置别名 -->
-	<typeAliases>
-		<!-- 批量扫描别名 -->
-		<package name="com.gyh.bean"></package>
-	</typeAliases>
-</configuration>
+	<!-- DAO接口所在包名，Spring会自动查找其下的类,xml就是dao接口的实现类，并会注入到spring中 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.gyh.mapper" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
 
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- 配置mybatis的日志记录 -->
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		<!-- 分页插件 -->
+		<property name="plugins">
+			<array>
+				<bean class="com.gyh.common.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+							dialect=mysql
+							reasonable=true
+							pageSizeZero=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<!-- 启用对事务注解的支持 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+
+	<!-- 其他连接池配置 -->
+	<!-- dbcp连接池配置 -->
+	<!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" 
+		destroy-method="close"> <property name="driverClassName" value="${jdbc.driver}" 
+		/> <property name="url" value="${jdbc.url}" /> <property name="username" 
+		value="${jdbc.username}" /> <property name="password" value="${jdbc.password}" 
+		/> <property name="initialSize" value="${dbcp.initialSize}"></property> <property 
+		name="maxActive" value="${dbcp.maxActive}"></property> <property name="maxIdle" 
+		value="${dbcp.maxIdle}"></property> <property name="minIdle" value="${dbcp.minIdle}"></property> 
+		<property name="maxWait" value="${dbcp.maxWait}"></property> </bean> -->
+	<!-- proxool连接池配置 -->
+	<!-- <bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource"> 
+		<property name="driver" value="${jdbc.driver}" /> <property name="driverUrl" 
+		value="${jdbc.url}" /> <property name="user" value="${jdbc.user}" /> <property 
+		name="password" value="${jdbc.password}" /> 测试的SQL执行语句 <property name="houseKeepingTestSql" 
+		value="select 1 from dual" /> <property name="prototypeCount" value="${proxool.prototypeCount}" 
+		/> <property name="houseKeepingSleepTime" value="${proxool.houseKeepingSleepTime}" 
+		/> <property name="maximumActiveTime" value="${proxool.maximumActiveTime}" 
+		/> <property name="maximumConnectionLifetime" value="${proxool.maximumConnectionLifetime}" 
+		/> <property name="minimumConnectionCount" value="${proxool.minimumConnectionCount}" 
+		/> <property name="maximumConnectionCount" value="${proxool.maximumConnectionCount}" 
+		/> <property name="simultaneousBuildThrottle" value="${proxool.simultaneousBuildThrottle}" 
+		/> </bean> -->
+	<!-- druid连接池配置 -->
+	<!-- <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"> 
+		<property name="driverClassName" value="${jdbc.driver}" /> <property name="url" 
+		value="${jdbc.url}" /> <property name="username" value="${jdbc.username}" 
+		/> druid连接池密码必须使用阿里自己的加密算法加密后的 <property name="password" value="bNVOqb7WKLX5Bjnw+LMv92taj25KOxDimXxILPQjw42wgv+1lHzOH8kr97xDwWdhpY67QuYCS7sWN4W46YbkFA==" 
+		/> 配置初始化大小、最小、最大 <property name="initialSize" value="1" /> <property name="minIdle" 
+		value="1" /> <property name="maxActive" value="10" /> 配置获取连接等待超时的时间 <property 
+		name="maxWait" value="10000" /> 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 <property 
+		name="timeBetweenEvictionRunsMillis" value="60000" /> 配置一个连接在池中最小生存的时间，单位是毫秒 
+		<property name="minEvictableIdleTimeMillis" value="300000" /> 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。默认false 
+		<property name="testWhileIdle" value="true" /> 这里建议配置为TRUE，防止取到的连接不可用 <property 
+		name="testOnBorrow" value="true" /> 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 
+		<property name="testOnReturn" value="false" /> 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100 
+		<property name="maxOpenPreparedStatements" value="200" /> 打开PSCache，并且指定每个连接上PSCache的大小 
+		<property name="poolPreparedStatements" value="true" /> <property name="maxPoolPreparedStatementPerConnectionSize" 
+		value="20" /> 这里配置提交方式，默认就是TRUE，可以不用配置 <property name="defaultAutoCommit" 
+		value="true" /> 验证连接有效与否的SQL，不同的数据配置不同 <property name="validationQuery" value="select 
+		1 " /> 属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有： 监控统计用的filter:stat日志用的filter:log4j防御sql注入的filter:wall 
+		<property name="filters" value="stat" /> </bean> -->
+
+</beans>  
