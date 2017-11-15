@@ -24,4 +24,6 @@ public interface MapperI<T> {
 	
 	void deleteAll();
 	
+	List<T> selectAll();
+	
 }

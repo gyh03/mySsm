@@ -3,7 +3,7 @@ package com.gyh.view;
 import java.util.HashMap;
 
 import com.gyh.bean.User;
-import com.gyh.util.DateTool;
+import com.gyh.utils.date.DateUtil;
 
 public class UserView extends HashMap<String, Object> {
 
@@ -12,7 +12,7 @@ public class UserView extends HashMap<String, Object> {
 	public UserView(User user) {
 		put("id", user.getId());
 		put("mobile", user.getMobile());
-		put("createTime", DateTool.standardSdf.format(user.getCreateTime()));
+		put("createTime", DateUtil.dateToDateString(user.getCreateTime()));
 	}
 	
 }

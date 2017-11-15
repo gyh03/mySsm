@@ -1,26 +1,21 @@
 package com.gyh.service;
 
-import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gyh.bean.User;
 import com.gyh.mapper.UserMapper;
-import com.gyh.util.CommonUtil;
-import com.gyh.util.DateTool;
 
-@Service("userService")
+@Service
 public class UserService {
 
-	@Resource
+	@Autowired
 	private UserMapper userMapper;
 	
 	public long insert(User user) {
-		String now = DateTool.standardSdf.format(new Date());
-		CommonUtil.setDefaultValue(user);
-		user.setCreateTime(now);
 		userMapper.insert(user);
 		return user.getId();
 	}
@@ -37,4 +32,12 @@ public class UserService {
 		userMapper.delete(id);
 	}
 	
+	public List<User> selectAll() {
+		return userMapper.selectAll();
+	}
+	
+	//登录
+	public User login(Map map){
+		return userMapper.loginByUandP(map);
+	}
 }

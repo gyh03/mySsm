@@ -5,9 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.gyh.exception.InvalidCustomException;
+import com.gyh.common.exception.CustomException;
+import com.gyh.common.validation.IsString;
 import com.gyh.utils.json.JacksonUtils;
-import com.gyh.validation.IsString;
 
 
 public class User {
@@ -67,7 +67,7 @@ public class User {
 		try {
 			this.createTime = sdf.parse(createTime);
 		} catch (ParseException e) {
-			throw new InvalidCustomException("invalid params.beginTime parse error.");
+			throw new CustomException("invalid params.beginTime parse error.");
 		}
 	}
 

@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import com.gyh.util.Constant.OpCode;
+import com.gyh.common.pojo.MessageCode;
 
 
 //@Component
@@ -20,6 +20,7 @@ public class IndexAspect {
 	//配置切入点,该方法无方法体,主要为方便同类中其他方法使用此处配置的切入点
 	@Pointcut("execution(* com.gyh.controller..*(..))")
 	public void aspect(){
+		System.err.println("aspect  。。。");
 	}
 	
 	public IndexAspect(){
@@ -44,7 +45,7 @@ public class IndexAspect {
 			Class<?> clazz = method.getDeclaringClass();
 			response = pjp.proceed(args);
 			
-			System.out.println("response:"+response);
+			System.out.println(response);
 			Map<String, Object> castResponse;
 			if (response == null) {
 				response = new HashMap<String, Object>();
@@ -53,7 +54,7 @@ public class IndexAspect {
 			if (response instanceof Map) {
 				castResponse = (Map<String, Object>) response;
 				castResponse.put("cost", (double)(System.currentTimeMillis() - startTime) / 1000);
-				castResponse.put("code", OpCode.SUCCESS);
+				castResponse.put("code", MessageCode.error.getCode());
 			}
 		} catch (Exception e) {
 		}
