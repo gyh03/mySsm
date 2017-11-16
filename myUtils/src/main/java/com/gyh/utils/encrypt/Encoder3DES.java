@@ -145,6 +145,11 @@ public class Encoder3DES {
 		return arrOut;
 	}
 
+	/**
+	 * 解密
+	 * @param pwd
+	 * @return
+	 */
 	public static String encrypt(String pwd) {
 		String code = null;
 		try {
@@ -156,6 +161,11 @@ public class Encoder3DES {
 		return code;
 	}
 
+	/**
+	 * 加密
+	 * @param code
+	 * @return
+	 */
 	public static String decrypt(String code) {
 		byte[] des = null;
 		String dec = "";

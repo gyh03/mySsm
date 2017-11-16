@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -74,7 +75,7 @@ public class ExcelFormatValidator {
 		}
 		
 		// 检验文件类型
-		String postfix = FileUtil.getPostfix(excelFile.getOriginalFilename());
+		String postfix =getPostfix(excelFile.getOriginalFilename());
 		if (!postfix.equals("xls") && !postfix.equals("xlsx")) {
 			errorInfo = "请上传正确的EXCEL文件，扩展名只能是xls或xlsx";
 			return false;
@@ -140,7 +141,20 @@ public class ExcelFormatValidator {
 
 		return true;
 	}
-	
+	/**
+	 * 获取文件后缀
+	 * @param filePath
+	 * @return
+	 */
+	public String getPostfix(String filePath) {
+		if (StringUtils.isBlank(filePath)) {
+			return "";
+		}
+		if (filePath.contains(".")) {
+			return filePath.substring(filePath.lastIndexOf(".") + 1, filePath.length());
+		}
+		return "";
+	}
 	/**
 	 * 获取单元格数据
 	 * @param cell

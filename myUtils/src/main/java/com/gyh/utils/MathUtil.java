@@ -2,6 +2,7 @@ package com.gyh.utils;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Random;
 
 /**
  * @author gyh
@@ -357,7 +358,21 @@ public class MathUtil {
 	public static double roundOff(double data) {
     	return Math.floor(data * 100) / 100;
     }
-    
+	/**
+	 * 产生随机字符串
+	 */
+	public  static final String randomString(int length) {
+		if (length < 1) {
+			return null;
+		}
+		Random randGen = new Random();
+		char[] numbersAndLetters = ("0123456789").toCharArray();
+		char[] randBuffer = new char[length];
+		for (int i = 0; i < randBuffer.length; i++) {
+			randBuffer[i] = numbersAndLetters[randGen.nextInt(10)];
+		}
+		return new String(randBuffer);
+	}
     public static void main(String[] args) {
 		System.out.println(MathUtil.formatNumber(new BigDecimal("1111111111.33333")));
 	}

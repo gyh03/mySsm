@@ -4,7 +4,6 @@ import java.security.MessageDigest;
 
 /** 
  * 采用MD5加密解密 
- * @author tfq 
  * @datetime 2011-10-13 
  */  
 public class MD5Util {  
@@ -54,11 +53,12 @@ public class MD5Util {
   
     // 测试主函数  
     public static void main(String args[]) {  
-        String s = new String("1234");  
+        String s = new String("xinshengh1234");  
         System.out.println("原始：" + s);  
-        System.out.println("MD5后：" + string2MD5(s));  
-        System.out.println("加密的：" + convertMD5(s));  
-        System.out.println("解密的：" + convertMD5(convertMD5(s)));  
+        String afString = string2MD5(s);
+        System.out.println("MD5后：" + afString);  
+        System.out.println("加密的：" + convertMD5(afString));  
+        System.out.println("解密的：" + convertMD5(convertMD5(afString)));  
   
     }  
 }  
