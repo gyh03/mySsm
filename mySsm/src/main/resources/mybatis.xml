@@ -53,7 +53,7 @@
 		<!-- 配置mybatis的日志记录 -->
 		<property name="configLocation" value="classpath:mybatis-config.xml" />
 		<!-- 分页插件 -->
-		<property name="plugins">
+		<!-- <property name="plugins">
 			<array>
 				<bean class="com.gyh.common.pagehelper.PageHelper">
 					<property name="properties">
@@ -65,7 +65,7 @@
 					</property>
 				</bean>
 			</array>
-		</property>
+		</property> -->
 	</bean>
 
 

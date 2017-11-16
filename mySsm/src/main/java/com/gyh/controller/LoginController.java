@@ -59,7 +59,13 @@ public class LoginController {
 //		System.out.println(redisSingle+"<<<<<<<<<<<<");
 //		redisSingle.opsForValue().set("single", "jajaja",1200,TimeUnit.SECONDS);
 //		redisCluster.set("cluster", "hahaha");
-		String a =redisCluster.get("cluster");
+		String a =null;
+		try {
+			
+			a=redisCluster.get("cluster");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		User user=userService.login(map);	
 		
 		if(user!=null){
