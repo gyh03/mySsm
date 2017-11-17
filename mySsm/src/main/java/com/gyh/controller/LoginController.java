@@ -1,6 +1,5 @@
 package com.gyh.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,10 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
-import com.gyh.bean.User;
+import com.gyh.bean.TUser;
 import com.gyh.common.inteceptor.SkipAuthCheck;
+import com.gyh.common.pojo.MessageResult;
 import com.gyh.service.UserService;
 import com.gyh.utils.encrypt.MD5Util;
 
@@ -30,7 +29,12 @@ public class LoginController {
 	@Autowired
 	public UserService userService;
 	/*@Autowired
-	public RedisTemplate<String,String> redisSingle;*/
+	public RedisTemplate<String,String> redisSingle;
+	//		System.out.println(redisSingle+"<<<<<<<<<<<<");
+//		redisSingle.opsForValue().set("single", "jajaja",1200,TimeUnit.SECONDS);
+//		redisCluster.set("cluster", "hahaha");
+//		String a =redisCluster.get("cluster");
+	*/
 	@Autowired
 	public JedisCluster redisCluster;
 	
@@ -39,51 +43,50 @@ public class LoginController {
 	public String driver;
 	
 	//登录--支持手机和用户名登录
-	@SkipAuthCheck //排除拦截
+	@SkipAuthCheck 
 	@ResponseBody
 	@RequestMapping("/dologin")
-	public Object dologin(HttpServletRequest request,HttpServletResponse response,String loginname,String password){
-		Map<String, Object> map=new HashMap<String, Object>();
-		Map<String, Object> result=new HashMap<String, Object>();
-		ModelAndView mv=new ModelAndView();
-		if(StringUtils.isEmpty(loginname)){
-			result.put("msg", "请输入用户名或手机号");
-			mv.addObject("result", result);
+	public Object dologin(HttpServletRequest request,HttpServletResponse response,String userName,String password){
+		MessageResult result = new MessageResult();
+		result.setSuccess(false);
+		if(StringUtils.isEmpty(userName)){
+			result.setSuccess(false);
+			result.setMsg("请输入用户名");
+			return result;
 		}
 		if(StringUtils.isEmpty(password)){
-			result.put("msg", "请输入密码");
-			mv.addObject("result", result);
+			result.setSuccess(false);
+			result.setMsg("请输入密码");
+			return result;
 		}
-		map.put("loginname", loginname);
-		map.put("password", MD5Util.string2MD5(password));
-//		System.out.println(redisSingle+"<<<<<<<<<<<<");
-//		redisSingle.opsForValue().set("single", "jajaja",1200,TimeUnit.SECONDS);
-//		redisCluster.set("cluster", "hahaha");
-		String a =null;
+
+		TUser user;
 		try {
-			
-			a=redisCluster.get("cluster");
+			user = userService.queryUserByUserName(userName);
+			if(user!=null){
+				if(user.getPassword().equals(MD5Util.string2MD5(password))){
+					result.setSuccess(true);
+					result.setData(user);
+				}else{
+					result.setMsg("密码错误");
+				}
+				
+				/*String userid=user.getId()+"";
+				String uuid=UUIDGenerator.generate(userid);
+				redisClient.set(userid, uuid);
+				redisClient.set(uuid, userid);
+				
+				result.put("user", user);
+				result.put("msg", "success");
+				result.put("uuid", redisClient.get(userid));*/
+				
+			}else{
+				result.setMsg("用户不存在");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		User user=userService.login(map);	
-		
-		if(user!=null){
-			String userid=user.getId()+"";
-			/*String uuid=UUIDGenerator.generate(userid);
-			redisClient.set(userid, uuid);
-			redisClient.set(uuid, userid);
-			
-			result.put("user", user);
-			result.put("msg", "success");
-			result.put("uuid", redisClient.get(userid));*/
-			mv.addObject("result", result);
-//			mv.setViewName("hello");
-		}else{
-			result.put("msg", "fail");
-			mv.addObject("result", result);
-		}
-		result.put("msg", driver+"<>"+a);
+			result.setMsg(e.getMessage());
+		}	
 		return result;
 	}
 

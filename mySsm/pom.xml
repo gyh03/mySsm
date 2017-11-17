@@ -98,6 +98,14 @@
 			<artifactId>jsqlparser</artifactId>
 		</dependency>
 
+		<!-- mybatis逆向工程 -->
+		<dependency>
+			<groupId>org.mybatis.generator</groupId>
+			<artifactId>mybatis-generator-core</artifactId>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- JSTL标签类 -->
 		<dependency>
 			<groupId>jstl</groupId>

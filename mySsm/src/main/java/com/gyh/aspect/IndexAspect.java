@@ -37,7 +37,7 @@ public class IndexAspect {
 		Object response = null;
 
 		try {
-			Object[] args = pjp.getArgs();
+			/*Object[] args = pjp.getArgs();
 			long startTime = System.currentTimeMillis();
 
 			MethodSignature signature = (MethodSignature) pjp.getSignature();
@@ -55,7 +55,7 @@ public class IndexAspect {
 				castResponse = (Map<String, Object>) response;
 				castResponse.put("cost", (double)(System.currentTimeMillis() - startTime) / 1000);
 				castResponse.put("code", MessageCode.error.getCode());
-			}
+			}*/
 		} catch (Exception e) {
 		}
 		return response;

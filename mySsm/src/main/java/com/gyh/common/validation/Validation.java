@@ -25,14 +25,14 @@ public class Validation {
 	 * @param fieldNames 需要校验的字段
 	 * @return 对象
 	 */
-	public <T> T getObject(String s, Class<T> classType, String[] fieldNames) {
+	public <T> T getObject(T t, String[] fieldNames) {
 		// get object from json
-		T t = null;
+		/*T t = null;
 		try {
 			t = JacksonUtils.fromJson(s, classType);
 		} catch (Exception e) {
 			throw new CustomException("input data is an invalid json string", e);
-		}
+		}*/
 
 		if (fieldNames == null || fieldNames.length == 0) {
 			return t;
@@ -104,8 +104,7 @@ public class Validation {
 	}
 	
 	private void checkIsString(Object object, String fieldName, int min, int max) {
-		if (object 
-				instanceof String) {
+		if (object  instanceof String) {
 			String value = (String) object;
 			value = value.trim();
 			int size = value.length();
@@ -149,17 +148,3 @@ public class Validation {
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

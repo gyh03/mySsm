@@ -1,28 +1,21 @@
 package com.gyh.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.gyh.bean.User;
-import com.gyh.common.exception.CustomException;
+import com.gyh.bean.TUser;
 import com.gyh.common.inteceptor.SkipAuthCheck;
-import com.gyh.common.pagehelper.PageHelper;
+import com.gyh.common.pojo.MessageResult;
 import com.gyh.common.validation.Validation;
 import com.gyh.service.UserService;
 import com.gyh.utils.encrypt.MD5Util;
-import com.gyh.view.UserView;
 
 @Controller
 public class UserController {
@@ -31,69 +24,76 @@ public class UserController {
 	private Validation validation;	
 	@Autowired
 	private UserService userService;	
-/*	@Autowired
+	/*	@Autowired
 	private RedisClientTemplate redisClientTemplate;*/	
 	/*@Autowired
 	@Qualifier("mongoTemplate")
 	protected MongoTemplate mongoTemplate;*/
-	
+
 	@RequestMapping(value="/user", method=RequestMethod.POST)
-    @ResponseBody
-    public Object post(@RequestBody String body){
-		Map<String,Object> result = new HashMap<String, Object>();
-		User user = validation.getObject(body, User.class, new String[]{"mobile","password"});
-		user.setPassword(MD5Util.convertMD5(user.getPassword()));
-		long id = userService.insert(user);
-		result.put("id", id);
+	@ResponseBody
+	public Object post(TUser user){
+		MessageResult result = new MessageResult();
+		result.setSuccess(false);
+		try {
+			user = validation.getObject(user, new String[]{"username","mobile","password"});
+			user.setPassword(MD5Util.string2MD5(user.getPassword()));
+			long id  = userService.insertUser(user);
+			result.setSuccess(true);
+			result.setData(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setMsg(e.getMessage());
+		}
 		return result;
-    }
-	
-	@RequestMapping(value="/user", method=RequestMethod.PUT)
+	}
+
+	/*@RequestMapping(value="/TUser", method=RequestMethod.PUT)
     @ResponseBody
     public Object put(@RequestBody String body){
 		Map<String,Object> result = new HashMap<String, Object>();
-		User user = validation.getObject(body, User.class, new String[]{"id"});
-		User src = userService.selectOne(user.getId());
+		TUser TUser = validation.getObject(body, TUser.class, new String[]{"id"});
+		TUser src = TUserService.selectOne(TUser.getId());
 		if(src == null) {
 			throw new CustomException("不存在的ID。");
 		}
 		try{
-			//user = (User) MergerUtil.merger(src, user);
+			//TUser = (TUser) MergerUtil.merger(src, TUser);
 		} catch (Exception e) {
 			throw new CustomException(e.getMessage());
 		}
-		user.setPassword(MD5Util.convertMD5(user.getPassword()));
-		long id = userService.insert(user);
+		TUser.setPassword(MD5Util.convertMD5(TUser.getPassword()));
+		long id = TUserService.insert(TUser);
 		result.put("id", id);
 		return result;
-    }
+    }*/
 
-	
-	@RequestMapping(value="/user", method=RequestMethod.DELETE)
+
+	/*	@RequestMapping(value="/TUser", method=RequestMethod.DELETE)
     @ResponseBody
     public Object get(@RequestParam Long id){
         Map<String, Object> result=new HashMap<String, Object>();
-        userService.delete(id);
+        TUserService.delete(id);
         return result;
     }
-	
-	@RequestMapping(value="/user", method=RequestMethod.GET)
+	 */
+	/*@RequestMapping(value="/TUser", method=RequestMethod.GET)
     @ResponseBody
     public Object get(@RequestParam String mobile,
     		@RequestParam String password){
         Map<String, Object> result=new HashMap<String, Object>();
-        User user = userService.selectByMobile(mobile);
-        if(user == null) {
+        TUser TUser = TUserService.selectByMobile(mobile);
+        if(TUser == null) {
         	throw new CustomException("找不到该手机号。");
         }
-        if(!user.getPassword().equals(MD5Util.convertMD5(password))) {
+        if(!TUser.getPassword().equals(MD5Util.convertMD5(password))) {
         	throw new CustomException("密码错误。");
         }
-        result.put("data", new UserView(user));
-        
+        result.put("data", new TUserView(TUser));
+
         return result;
-    }
-	
+    }*/
+
 	//redis 测试
 	/*@ResponseBody
 	@RequestMapping("/testRedis")
@@ -104,7 +104,7 @@ public class UserController {
 		result.put("data", redisClientTemplate.get("key"));
 		return result;
 	}*/
-	
+
 	@SkipAuthCheck
 	@ResponseBody //ResponseBody返回json
 	@RequestMapping("/testJson")
@@ -114,19 +114,19 @@ public class UserController {
 		map.put("age", age);
 		return map;
 	}
-	
-	//分页测试
+
+	/*//分页测试
 	@ResponseBody
 	@RequestMapping("/testPage")
 	public Object testPage(HttpServletRequest request,HttpServletResponse response){
 		Map<String, Object> result=new HashMap<String, Object>();
 		PageHelper.startPage(request);
-		List<User> list=userService.selectAll();		
+		List<TUser> list=TUserService.selectAll();		
 		PageHelper.addPages(result, list);
 		result.put("msg", "success");
 		result.put("data", list);
 		return result;
-	}
+	}*/
 	//mongodb测试
 	/*@ResponseBody
 	@RequestMapping("/testMongo")
