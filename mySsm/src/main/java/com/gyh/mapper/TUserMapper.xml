@@ -8,6 +8,7 @@
     <result column="mobile" property="mobile" jdbcType="VARCHAR" />
     <result column="sex" property="sex" jdbcType="BIT" />
     <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="delfalg" property="delfalg" jdbcType="BIT" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -68,7 +69,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, username, password, mobile, sex, createtime
+    id, username, password, mobile, sex, createtime, delfalg
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gyh.bean.TUserExample" >
     select
@@ -105,9 +106,9 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into t_user (username, password, mobile, 
-      sex, createtime)
+      sex, createtime, delfalg)
     values (#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
-      #{sex,jdbcType=BIT}, #{createtime,jdbcType=TIMESTAMP})
+      #{sex,jdbcType=BIT}, #{createtime,jdbcType=TIMESTAMP}, #{delfalg,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.gyh.bean.TUser" >
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
@@ -130,6 +131,9 @@
       <if test="createtime != null" >
         createtime,
       </if>
+      <if test="delfalg != null" >
+        delfalg,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="username != null" >
@@ -146,6 +150,9 @@
       </if>
       <if test="createtime != null" >
         #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delfalg != null" >
+        #{delfalg,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -176,6 +183,9 @@
       <if test="record.createtime != null" >
         createtime = #{record.createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.delfalg != null" >
+        delfalg = #{record.delfalg,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -188,7 +198,8 @@
       password = #{record.password,jdbcType=VARCHAR},
       mobile = #{record.mobile,jdbcType=VARCHAR},
       sex = #{record.sex,jdbcType=BIT},
-      createtime = #{record.createtime,jdbcType=TIMESTAMP}
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      delfalg = #{record.delfalg,jdbcType=BIT}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -211,6 +222,9 @@
       <if test="createtime != null" >
         createtime = #{createtime,jdbcType=TIMESTAMP},
       </if>
+      <if test="delfalg != null" >
+        delfalg = #{delfalg,jdbcType=BIT},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -220,7 +234,8 @@
       password = #{password,jdbcType=VARCHAR},
       mobile = #{mobile,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=BIT},
-      createtime = #{createtime,jdbcType=TIMESTAMP}
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      delfalg = #{delfalg,jdbcType=BIT}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

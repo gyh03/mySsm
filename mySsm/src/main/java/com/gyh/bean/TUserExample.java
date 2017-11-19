@@ -494,6 +494,66 @@ public class TUserExample {
             addCriterion("createtime not between", value1, value2, "createtime");
             return (Criteria) this;
         }
+
+        public Criteria andDelfalgIsNull() {
+            addCriterion("delfalg is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgIsNotNull() {
+            addCriterion("delfalg is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgEqualTo(Boolean value) {
+            addCriterion("delfalg =", value, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgNotEqualTo(Boolean value) {
+            addCriterion("delfalg <>", value, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgGreaterThan(Boolean value) {
+            addCriterion("delfalg >", value, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("delfalg >=", value, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgLessThan(Boolean value) {
+            addCriterion("delfalg <", value, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgLessThanOrEqualTo(Boolean value) {
+            addCriterion("delfalg <=", value, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgIn(List<Boolean> values) {
+            addCriterion("delfalg in", values, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgNotIn(List<Boolean> values) {
+            addCriterion("delfalg not in", values, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgBetween(Boolean value1, Boolean value2) {
+            addCriterion("delfalg between", value1, value2, "delfalg");
+            return (Criteria) this;
+        }
+
+        public Criteria andDelfalgNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("delfalg not between", value1, value2, "delfalg");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

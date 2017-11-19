@@ -3,7 +3,8 @@ package com.gyh.common.pojo;
 public enum MessageCode {
 	
 	error(false,"系统错误",4000),
-	success(true,"成功",2000)
+	success(true,"操作成功",2000),
+	fail(false,"操作失败",3000)
     ;
 
 	private String name;

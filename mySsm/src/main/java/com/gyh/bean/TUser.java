@@ -2,21 +2,20 @@ package com.gyh.bean;
 
 import java.util.Date;
 
-import com.gyh.common.validation.IsString;
-
 public class TUser {
     private Integer id;
-    
-    @IsString(minLength=1,maxLength=15)
+
     private String username;
-    @IsString(minLength=1,maxLength=20)
+
     private String password;
-    @IsString(minLength=11,maxLength=11)
+
     private String mobile;
 
     private Boolean sex;
 
     private Date createtime;
+
+    private Boolean delfalg;
 
     public Integer getId() {
         return id;
@@ -64,5 +63,13 @@ public class TUser {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
+    }
+
+    public Boolean getDelfalg() {
+        return delfalg;
+    }
+
+    public void setDelfalg(Boolean delfalg) {
+        this.delfalg = delfalg;
     }
 }

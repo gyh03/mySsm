@@ -3,8 +3,6 @@ package com.gyh.mapper;
 import com.gyh.bean.TUser;
 import com.gyh.bean.TUserExample;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Param;
 
 public interface TUserMapper {

@@ -9,9 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.gyh.common.exception.CustomException;
-import com.gyh.common.exception.CustomException;
-import com.gyh.utils.json.JacksonUtils;
+import com.gyh.exception.InvalidCustomException;
 
 @Component
 public class Validation {
@@ -31,7 +29,7 @@ public class Validation {
 		try {
 			t = JacksonUtils.fromJson(s, classType);
 		} catch (Exception e) {
-			throw new CustomException("input data is an invalid json string", e);
+			throw new InvalidCustomException("input data is an invalid json string", e);
 		}*/
 
 		if (fieldNames == null || fieldNames.length == 0) {
@@ -59,9 +57,8 @@ public class Validation {
 				field.setAccessible(true);
 				fieldObject = field.get(t);
 			} catch (Exception e) {
-				throw new CustomException(e);
+				throw new InvalidCustomException(e);
 			}
-			
 			if (field.isAnnotationPresent(NotNull.class)) {
 				checkNotNull(fieldObject, name);
 			} else if (field.isAnnotationPresent(IsInt.class)) {
@@ -82,7 +79,7 @@ public class Validation {
 
 	private void checkNotNull(Object object, String fieldName) {
 		if (object == null) {
-			throw new CustomException("");
+			throw new InvalidCustomException("");
 		}
 	}
 
@@ -95,11 +92,11 @@ public class Validation {
 		} else if (object instanceof Short) {
 			value = (Short)object;
 		} else {
-			throw new CustomException(fieldName + " is not exist or it is not a number");
+			throw new InvalidCustomException(fieldName + " is not exist or it is not a number");
 		}
 		
 		if (value < min || value > max) {
-			throw new CustomException(fieldName + " is out of range, min:" + min + ", max:" + max);
+			throw new InvalidCustomException(fieldName + " is out of range, min:" + min + ", max:" + max);
 		}
 	}
 	
@@ -109,10 +106,10 @@ public class Validation {
 			value = value.trim();
 			int size = value.length();
 			if (size < min || size > max) {
-				throw new CustomException(fieldName + " length is out of range, min:" + min + ", max:" + max);
+				throw new InvalidCustomException(fieldName + " length is out of range, min:" + min + ", max:" + max);
 			}
 		} else {
-			throw new CustomException(fieldName + " is not exist or it is not a string");
+			throw new InvalidCustomException(fieldName + " is not exist or it is not a string");
 		}
 	}
 	
@@ -125,12 +122,12 @@ public class Validation {
 		} else if (object instanceof Short) {
 			value = (Short)object;
 		} else {
-			throw new CustomException(fieldName + " is not exist or it is not a number");
+			throw new InvalidCustomException(fieldName + " is not exist or it is not a number");
 		}
 
 		Arrays.sort(intList);
 		if (Arrays.binarySearch(intList, value) < 0) {
-			throw new CustomException(fieldName + " is not in array:" + Arrays.toString(intList));
+			throw new InvalidCustomException(fieldName + " is not in array:" + Arrays.toString(intList));
 		}
 	}
 
@@ -143,7 +140,7 @@ public class Validation {
 	 */
 	public void checkPage(int page, int pageSize) {
 		if (page <= 0 || page > 2000 || pageSize <= 0 || pageSize > 100) {
-			throw new CustomException("page or page size is invalid");
+			throw new InvalidCustomException("page or page size is invalid");
 		}
 	}
 
