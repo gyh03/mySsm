@@ -35,7 +35,7 @@ public class LoginController {
 //		redisCluster.set("cluster", "hahaha");
 //		String a =redisCluster.get("cluster");
 	*/
-	@Autowired
+	@Autowired(required=false)
 	public JedisCluster redisCluster;
 	
 	

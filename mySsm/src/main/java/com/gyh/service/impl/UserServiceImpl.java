@@ -8,11 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.gyh.bean.TUser;
 import com.gyh.bean.TUserExample;
+import com.gyh.common.pojo.MessageCode;
 import com.gyh.exception.InvalidCustomException;
 import com.gyh.mapper.TUserMapper;
 import com.gyh.service.UserService;
-import com.sun.org.apache.regexp.internal.recompile;
-import com.sun.xml.internal.ws.api.pipe.Tube;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,9 +23,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public TUser queryUserByUserName(String userName)throws Exception{
 		TUser user = null;
-		TUserExample example = new TUserExample();
-		example.createCriteria().andUsernameEqualTo(userName);
-		List<TUser> list = userMapper.selectByExample(example);
+		List<TUser> list = getUsersByUserName(userName);
 		if(CollectionUtils.isNotEmpty(list)){
 			if(list.size()>1){
 				throw new InvalidCustomException(5000,"存在两个用户名相同的用户");
@@ -36,11 +33,21 @@ public class UserServiceImpl implements UserService {
 		}
 		return user;
 	}
+	
+	public List<TUser> getUsersByUserName(String userName) {
+		TUserExample example = new TUserExample();
+		example.createCriteria().andUsernameEqualTo(userName).andDelfalgEqualTo(false);
+		return userMapper.selectByExample(example);
+	}
 
 	@Override
 	public int insertUser(TUser user) throws Exception {
-		//TODO 校验用户名是否重复
-		return userMapper.insert(user);
+		//校验用户名是否重复
+		List<TUser> list = getUsersByUserName(user.getUsername());
+		if(list.size()>0){
+			throw new InvalidCustomException(MessageCode.fail.getCode(),"用户名已存在，请重新输入");
+		}
+		return userMapper.insertSelective(user);
 	}
 
 	@Override

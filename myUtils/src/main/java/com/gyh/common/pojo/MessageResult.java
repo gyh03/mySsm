@@ -2,7 +2,7 @@ package com.gyh.common.pojo;
 
 public class MessageResult {
 	
-	private boolean isSuccess;
+	private Boolean isSuccess ;
 	/** 返回代码 */
 	private Integer code;
 	/** 返回信息 */
@@ -44,10 +44,10 @@ public class MessageResult {
 	public void setData(Object data) {
 		this.data = data;
 	}
-	public boolean isSuccess() {
+	public Boolean isSuccess() {
 		return isSuccess;
 	}
-	public void setSuccess(boolean isSuccess) {
+	public void setSuccess(Boolean isSuccess) {
 		this.isSuccess = isSuccess;
 	}
 

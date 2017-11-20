@@ -27,6 +27,8 @@ import com.gyh.utils.date.DateUtil;
  */
 public class Checker
 {
+	
+	 public static final String REGEX_MOBILE = "^((17[0-9])|(14[0-9])|(13[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$";
 
 	public Checker()
 	{
@@ -38,7 +40,7 @@ public class Checker
 	 * @return
 	 */
 	public static final boolean isPhoneNo(String phone){
-		Pattern p = Pattern.compile("^((13[0-9])|(15[^4,\\D])|(18[0,5-9])|(177))\\d{8}$");
+		Pattern p = Pattern.compile(REGEX_MOBILE);
 		Matcher m = p.matcher(phone);
 		return m.matches();
 	}

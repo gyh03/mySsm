@@ -4,6 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,17 +20,14 @@ import com.gyh.bean.TUser;
 import com.gyh.common.inteceptor.SkipAuthCheck;
 import com.gyh.common.pojo.MessageCode;
 import com.gyh.common.pojo.MessageResult;
-import com.gyh.common.validation.Validation;
 import com.gyh.exception.InvalidCustomException;
 import com.gyh.service.UserService;
+import com.gyh.utils.BindingResultCheack;
 import com.gyh.utils.encrypt.MD5Util;
-import com.sun.org.apache.regexp.internal.REUtil;
 
 @Controller
 public class UserController {
 
-	@Autowired
-	private Validation validation;	
 	@Autowired
 	private UserService userService;	
 	/*	@Autowired
@@ -38,20 +38,14 @@ public class UserController {
 
 	@RequestMapping(value="/user", method=RequestMethod.POST)
 	@ResponseBody
-	public Object insertUser(TUser user,BindingResult userRes){
+	public Object insertUser(@Valid()TUser user,BindingResult bindingResult){
 		MessageResult result = new MessageResult();
-		result.setSuccess(MessageCode.fail.getFlag());
-		result.setMsg(MessageCode.fail.getName());
-		result.setCode(MessageCode.fail.getCode());
-		if (userRes.getErrorCount() > 0) {
-			List<FieldError> errors = userRes.getFieldErrors();
-			for (int i = 0; i < errors.size(); i++) {
-				result.setMsg(String.format("参数%s，报错%s",errors.get(i).getField(),errors.get(i).getDefaultMessage()));
-			}
+		//数据绑定结果
+		result = BindingResultCheack.checkBindingResult(bindingResult,result);
+		if(result.isSuccess() !=null && !result.isSuccess() ){
 			return result;
 		}
 		try {
-//			user = validation.getObject(user, new String[]{"username","mobile","password"});
 			user.setPassword(MD5Util.string2MD5(user.getPassword()));
 			long id  = userService.insertUser(user);
 			if(id > 0){
@@ -69,22 +63,18 @@ public class UserController {
 
 	@RequestMapping(value="/user", method=RequestMethod.PUT)
     @ResponseBody
-    public Object updateUser(TUser user,BindingResult userRes){
+    public Object updateUser(@Valid()TUser user,BindingResult bindingResult){
 		MessageResult result = new MessageResult();
-		result.setSuccess(MessageCode.fail.getFlag());
-		result.setMsg(MessageCode.fail.getName());
-		result.setCode(MessageCode.fail.getCode());
-		if (userRes.getErrorCount() > 0) {
-			List<FieldError> errors = userRes.getFieldErrors();
-			for (int i = 0; i < errors.size(); i++) {
-				result.setMsg(String.format("参数%s，报错%s",errors.get(i).getField(),errors.get(i).getDefaultMessage()));
-			}
+		result = BindingResultCheack.checkBindingResult(bindingResult,result);
+		if(result.isSuccess() !=null && !result.isSuccess() ){
 			return result;
 		}
 		try {
-//			TUser TUser = validation.getObject(body, TUser.class, new String[]{"id"});
 			if(user.getId() == null){
 				throw new InvalidCustomException("ID不可为空");
+			}
+			if(user.getPassword()!=null){
+				user.setPassword(MD5Util.string2MD5(user.getPassword()));
 			}
 			Integer update = userService.updateUser(user);
 			if(update != null && update > 0){
