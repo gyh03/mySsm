@@ -45,8 +45,11 @@ public class BindingResultCheack {
 			}
 			result.setMsg(MessageCode.bindingError.getName());
 			result.setSuccess(MessageCode.bindingError.getFlag());
+			result.setBindingSuccess(MessageCode.bindingError.getFlag());
 			result.setCode(MessageCode.bindingError.getCode());
 			result.setData(bindingError);
+		}else{
+			result.setBindingSuccess(MessageCode.bindingSuccess.getFlag());
 		}
 		return result;
 	}
