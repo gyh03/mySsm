@@ -3,6 +3,7 @@ package com.gyh.common.pojo;
 public class MessageResult {
 	
 	private Boolean isSuccess ;
+	private Boolean bindingSuccess ;
 	/** 返回代码 */
 	private Integer code;
 	/** 返回信息 */
@@ -14,6 +15,18 @@ public class MessageResult {
 	
 	
 	
+	public Boolean isSuccess() {
+		return isSuccess;
+	}
+	public void setSuccess(Boolean isSuccess) {
+		this.isSuccess = isSuccess;
+	}
+	public Boolean isBindingSuccess() {
+		return bindingSuccess;
+	}
+	public void setBindingSuccess(Boolean bindingSuccess) {
+		this.bindingSuccess = bindingSuccess;
+	}
 	public Object getOther() {
 		return other;
 	}
@@ -43,12 +56,6 @@ public class MessageResult {
 	}
 	public void setData(Object data) {
 		this.data = data;
-	}
-	public Boolean isSuccess() {
-		return isSuccess;
-	}
-	public void setSuccess(Boolean isSuccess) {
-		this.isSuccess = isSuccess;
 	}
 
 }

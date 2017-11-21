@@ -9,6 +9,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 
@@ -38,7 +39,7 @@ public class TUser {
     @Past(message="出生日期必须是过去的时间")
     private Date birthday;
     
-    @NumberFormat(pattern="#.###.##")
+    @NumberFormat(pattern="#,###.##")
     private BigDecimal salary;
 
     private Date createtime;

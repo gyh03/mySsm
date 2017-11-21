@@ -23,8 +23,8 @@ public class IDGenerator {
 	 * 获取时间戳
 	 * @return
 	 */
-	public static synchronized Long getTimeLongStr(){
-	    return System.currentTimeMillis();
+	public static synchronized String getTimeLongStr(){
+	    return System.currentTimeMillis()+"";
 	}
 	
 	public static synchronized Long getNumberLongStr(){

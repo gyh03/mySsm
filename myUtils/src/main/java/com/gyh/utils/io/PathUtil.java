@@ -30,7 +30,7 @@ public class PathUtil {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		File file = new File(getClassResources() + "template/"+"template_single_line.pdf");
+		File file = new File(getClassResources() + "abc.txt");
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line = null;
@@ -39,7 +39,7 @@ public class PathUtil {
 		}
 		fileReader.close();
 		
-		System.out.println(String.valueOf(Thread.currentThread().getContextClassLoader().getResource("")));
+		System.out.println(">>"+String.valueOf(Thread.currentThread().getContextClassLoader().getResource("")));
 		System.out.println(getClasspath());
 		System.out.println(getClassResources());
 	}

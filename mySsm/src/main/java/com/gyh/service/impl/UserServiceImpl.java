@@ -1,5 +1,6 @@
 package com.gyh.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -47,6 +48,7 @@ public class UserServiceImpl implements UserService {
 		if(list.size()>0){
 			throw new InvalidCustomException(MessageCode.fail.getCode(),"用户名已存在，请重新输入");
 		}
+		user.setCreatetime(new Date());
 		return userMapper.insertSelective(user);
 	}
 

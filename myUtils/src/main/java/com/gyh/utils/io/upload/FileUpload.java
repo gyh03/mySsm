@@ -8,7 +8,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * 上传文件
+ * 上传文件，使用流上传较慢，推荐使用springmvc上传
  * @version
  */
 public class FileUpload {
@@ -16,7 +16,7 @@ public class FileUpload {
 	/**
 	 * @param file 			//文件对象
 	 * @param filePath		//上传路径
-	 * @param fileName		//文件名
+	 * @param fileName		//文件名：带扩展名格式
 	 * @return  文件名文件名路径
 	 */
 	public static String fileUp(MultipartFile file, String filePath, String fileName)throws Exception{
@@ -25,7 +25,6 @@ public class FileUpload {
 			extName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
 		}
 		copyFile(file.getInputStream(), filePath, fileName+extName);
-//		copyFile(file.getInputStream(), PathUtil.getClasspath()+filePath, fileName+extName).replaceAll("-", "");
 		return filePath  + fileName + extName;
 	}
 	/**

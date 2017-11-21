@@ -12,6 +12,7 @@
         <property name="locations">  
             <list>  
                 <value>classpath:database.properties</value>  
+                <value>classpath:basepro.properties</value>  
             </list>  
         </property>  
     </bean>
@@ -41,6 +42,6 @@
 	<!-- 引入redis。推荐使用集群redis，不需要spring-data-redis的maven依赖 ，使用redis原生jar包操作，更简单，
 		而且集群好处多多，如可以分布式存储数据，主从复制，避免单点服务宕机危险等 
 		(集群中的某节点挂掉之后，集群会自动将此节点下的数据复制到其他节点，槽位也转移到其他节点，这样就不会影响redis的正常读写) -->
-	<import resource="redis-cluster.xml" />
+	<!-- <import resource="redis-cluster.xml" /> -->
 	<!-- <import resource="redis-single.xml" /> -->
 </beans>

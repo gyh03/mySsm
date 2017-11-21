@@ -41,7 +41,8 @@
 	<!-- 文件上传 需要使用到的配置 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="1046666000" />
+		<property name="maxUploadSize" value="#{prop['maxUploadSize']}" /><!-- 文件最大限制 ，100M，可配置-->
+		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
 	<aop:aspectj-autoproxy proxy-target-class="true" />

@@ -42,7 +42,7 @@ public class UserController {
 		MessageResult result = new MessageResult();
 		//数据绑定结果
 		result = BindingResultCheack.checkBindingResult(bindingResult,result);
-		if(result.isSuccess() !=null && !result.isSuccess() ){
+		if( !result.isBindingSuccess() ){//绑定失败
 			return result;
 		}
 		try {
@@ -66,7 +66,7 @@ public class UserController {
     public Object updateUser(@Valid()TUser user,BindingResult bindingResult){
 		MessageResult result = new MessageResult();
 		result = BindingResultCheack.checkBindingResult(bindingResult,result);
-		if(result.isSuccess() !=null && !result.isSuccess() ){
+		if( !result.isBindingSuccess() ){
 			return result;
 		}
 		try {
