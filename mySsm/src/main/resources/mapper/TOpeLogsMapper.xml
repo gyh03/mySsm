@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gyh.mapper.TOpeLogsMapper" >
+  <resultMap id="BaseResultMap" type="com.gyh.bean.TOpeLogs" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ope_type" property="opeType" jdbcType="VARCHAR" />
+    <result column="node" property="node" jdbcType="VARCHAR" />
+    <result column="result_flag" property="resultFlag" jdbcType="BIT" />
+    <result column="param_json" property="paramJson" jdbcType="VARCHAR" />
+    <result column="result_json" property="resultJson" jdbcType="VARCHAR" />
+    <result column="createtime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="create_user_id" property="createUserId" jdbcType="INTEGER" />
+    <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+    <result column="login_browser" property="loginBrowser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, ope_type, node, result_flag, param_json, result_json, createtime, create_user_id, 
+    login_ip, login_browser
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.gyh.bean.TOpeLogsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_ope_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_ope_logs
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_ope_logs
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.gyh.bean.TOpeLogsExample" >
+    delete from t_ope_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.gyh.bean.TOpeLogs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_ope_logs (ope_type, node, result_flag, 
+      param_json, result_json, createtime, 
+      create_user_id, login_ip, login_browser
+      )
+    values (#{opeType,jdbcType=VARCHAR}, #{node,jdbcType=VARCHAR}, #{resultFlag,jdbcType=BIT}, 
+      #{paramJson,jdbcType=VARCHAR}, #{resultJson,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createUserId,jdbcType=INTEGER}, #{loginIp,jdbcType=VARCHAR}, #{loginBrowser,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gyh.bean.TOpeLogs" >
+    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into t_ope_logs
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="opeType != null" >
+        ope_type,
+      </if>
+      <if test="node != null" >
+        node,
+      </if>
+      <if test="resultFlag != null" >
+        result_flag,
+      </if>
+      <if test="paramJson != null" >
+        param_json,
+      </if>
+      <if test="resultJson != null" >
+        result_json,
+      </if>
+      <if test="createtime != null" >
+        createtime,
+      </if>
+      <if test="createUserId != null" >
+        create_user_id,
+      </if>
+      <if test="loginIp != null" >
+        login_ip,
+      </if>
+      <if test="loginBrowser != null" >
+        login_browser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="opeType != null" >
+        #{opeType,jdbcType=VARCHAR},
+      </if>
+      <if test="node != null" >
+        #{node,jdbcType=VARCHAR},
+      </if>
+      <if test="resultFlag != null" >
+        #{resultFlag,jdbcType=BIT},
+      </if>
+      <if test="paramJson != null" >
+        #{paramJson,jdbcType=VARCHAR},
+      </if>
+      <if test="resultJson != null" >
+        #{resultJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null" >
+        #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginBrowser != null" >
+        #{loginBrowser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.gyh.bean.TOpeLogsExample" resultType="java.lang.Integer" >
+    select count(*) from t_ope_logs
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_ope_logs
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.opeType != null" >
+        ope_type = #{record.opeType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.node != null" >
+        node = #{record.node,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resultFlag != null" >
+        result_flag = #{record.resultFlag,jdbcType=BIT},
+      </if>
+      <if test="record.paramJson != null" >
+        param_json = #{record.paramJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resultJson != null" >
+        result_json = #{record.resultJson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUserId != null" >
+        create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.loginIp != null" >
+        login_ip = #{record.loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="record.loginBrowser != null" >
+        login_browser = #{record.loginBrowser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_ope_logs
+    set id = #{record.id,jdbcType=INTEGER},
+      ope_type = #{record.opeType,jdbcType=VARCHAR},
+      node = #{record.node,jdbcType=VARCHAR},
+      result_flag = #{record.resultFlag,jdbcType=BIT},
+      param_json = #{record.paramJson,jdbcType=VARCHAR},
+      result_json = #{record.resultJson,jdbcType=VARCHAR},
+      createtime = #{record.createtime,jdbcType=TIMESTAMP},
+      create_user_id = #{record.createUserId,jdbcType=INTEGER},
+      login_ip = #{record.loginIp,jdbcType=VARCHAR},
+      login_browser = #{record.loginBrowser,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gyh.bean.TOpeLogs" >
+    update t_ope_logs
+    <set >
+      <if test="opeType != null" >
+        ope_type = #{opeType,jdbcType=VARCHAR},
+      </if>
+      <if test="node != null" >
+        node = #{node,jdbcType=VARCHAR},
+      </if>
+      <if test="resultFlag != null" >
+        result_flag = #{resultFlag,jdbcType=BIT},
+      </if>
+      <if test="paramJson != null" >
+        param_json = #{paramJson,jdbcType=VARCHAR},
+      </if>
+      <if test="resultJson != null" >
+        result_json = #{resultJson,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        createtime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        create_user_id = #{createUserId,jdbcType=INTEGER},
+      </if>
+      <if test="loginIp != null" >
+        login_ip = #{loginIp,jdbcType=VARCHAR},
+      </if>
+      <if test="loginBrowser != null" >
+        login_browser = #{loginBrowser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gyh.bean.TOpeLogs" >
+    update t_ope_logs
+    set ope_type = #{opeType,jdbcType=VARCHAR},
+      node = #{node,jdbcType=VARCHAR},
+      result_flag = #{resultFlag,jdbcType=BIT},
+      param_json = #{paramJson,jdbcType=VARCHAR},
+      result_json = #{resultJson,jdbcType=VARCHAR},
+      createtime = #{createtime,jdbcType=TIMESTAMP},
+      create_user_id = #{createUserId,jdbcType=INTEGER},
+      login_ip = #{loginIp,jdbcType=VARCHAR},
+      login_browser = #{loginBrowser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

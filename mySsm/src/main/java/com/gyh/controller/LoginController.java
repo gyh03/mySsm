@@ -1,6 +1,8 @@
 package com.gyh.controller;
 
+import com.gyh.aspect.OpeLogInfo;
 import com.gyh.bean.TUser;
+import com.gyh.common.constant.CommonConstant;
 import com.gyh.common.inteceptor.SkipAuthCheck;
 import com.gyh.common.pojo.MessageResult;
 import com.gyh.service.UserService;
@@ -46,12 +48,12 @@ public class LoginController {
 	@Value("#{prop['jdbc.driver']}")
 	private String driver;
 
-	private final String OnlineUsers = "ONLINEUSERS";
 
 	//登录--支持手机和用户名登录
 	@SkipAuthCheck 
 	@ResponseBody
 	@RequestMapping(value = "/dologin",method = RequestMethod.POST)
+	@OpeLogInfo(node = "用户登录")
 	public MessageResult dologin(HttpServletRequest request,HttpServletResponse response,String userName,String password){
 		MessageResult result = new MessageResult();
 		result.setSuccess(false);
@@ -81,8 +83,8 @@ public class LoginController {
 					redisCluster.expire(userToken,1200);
 					redisCluster.set(loginUserID,userToken);
 					//记录在线用户
-					redisCluster.rpush(OnlineUsers,loginUserID);
-
+					redisCluster.rpush(CommonConstant.OnlineUsers,loginUserID);
+					request.getSession().setAttribute(CommonConstant.loginUser,user);
 					result.setData(userToken);
 					result.setMsg("success");
 					result.setOther(user);
@@ -106,12 +108,12 @@ public class LoginController {
 	public MessageResult onlineUsers(){
 		MessageResult result = new MessageResult();
 
-		List<String> onlineUserIds = redisCluster.lrange(OnlineUsers,0,-1);
+		List<String> onlineUserIds = redisCluster.lrange(CommonConstant.OnlineUsers,0,-1);
 		List<String> offlineUserIds = new ArrayList<String>();
 		String userId = null;
 		String useTroken = null;
 		String userJson = null;
-		Map<String,String> userMap = new HashMap<>();
+		Map<String,String> userMap = new HashMap<String,String>();
 		List<TUser> onlineUsers = new ArrayList<>();
 		for (int i = 0; i < onlineUserIds.size(); i++) {
 			userId = onlineUserIds.get(i);
@@ -124,11 +126,13 @@ public class LoginController {
 				onlineUsers.add(JacksonUtils.fromJson(userJson,TUser.class));
 			}
 		}
-		onlineUserIds.removeAll(offlineUserIds);
-		redisCluster.del(OnlineUsers);
+		if(onlineUserIds != null){
+			onlineUserIds.removeAll(offlineUserIds);
+		}
+		redisCluster.del(CommonConstant.OnlineUsers);
 		for (int i = 0; i <onlineUserIds.size() ; i++) {
 			userId = onlineUserIds.get(i);
-			redisCluster.rpush(OnlineUsers,userId);
+			redisCluster.rpush(CommonConstant.OnlineUsers,userId);
 		}
 		result.setSuccess(true);
 		result.setData(onlineUsers);

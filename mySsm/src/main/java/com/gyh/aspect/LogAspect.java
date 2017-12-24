@@ -1,6 +1,9 @@
 package com.gyh.aspect;
 
+import com.gyh.bean.TOpeLogs;
+import com.gyh.bean.TUser;
 import com.gyh.common.pojo.MessageResult;
+import com.gyh.service.OpeLogService;
 import com.gyh.utils.json.JacksonUtils;
 import org.apache.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
@@ -8,6 +11,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -16,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +29,9 @@ import java.util.Map;
 @Aspect
 public class LogAspect {
 	private Logger log=Logger.getLogger(LogAspect.class);
+
+	@Autowired
+	private OpeLogService opeLogService;
 
 	//配置切入点,该方法无方法体,主要为方便同类中其他方法使用此处配置的切入点，使用@OpeLogInfo注解的，记录日志
 	@Pointcut("@annotation(com.gyh.aspect.OpeLogInfo))")
@@ -39,7 +47,7 @@ public class LogAspect {
 
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 		//读取登录用户
-
+		TUser loginUser = (TUser) request.getSession().getAttribute("loginUser");
 		//获取用户请求方法的参数
 		StringBuffer params = new StringBuffer();
 		if (joinPoint.getArgs() !=  null && joinPoint.getArgs().length > 0) {
@@ -54,7 +62,7 @@ public class LogAspect {
 					continue;
 				}
 				try {
-					params.append(JacksonUtils.toJson(joinPoint.getArgs()[i])).append(";");
+					params.append("第").append(i).append("个参数：").append(JacksonUtils.toJson(joinPoint.getArgs()[i])).append("；");
 				} catch (Exception e) {
 					continue;
 				}
@@ -63,18 +71,20 @@ public class LogAspect {
 		try {
 			//*========数据库日志=========*//
 			Map<String,Object> annotation = getControllerMethodDescription(joinPoint);
-			Map<String, Object> param=new HashMap<String, Object>();
-			param.put("loginIp", getIpAddress(request));
-			param.put("loginBrowser", request.getHeader("User-Agent"));
+
+			TOpeLogs log = new TOpeLogs();
+			log.setCreatetime(new Date());
 			if(annotation.get("node") !=null){
-				param.put("node", annotation.get("node"));//操作
+				log.setNode(annotation.get("node").toString());
 			}
-			if(annotation.get("sysCode") !=null){
-				param.put("sysCode", annotation.get("sysCode"));//业务系统code
-			}
-			param.put("note", String.format("入参：【%s】，结果：【%s】",params.toString(), JacksonUtils.toJson(result)));//结果
+			log.setLoginIp(getIpAddress(request));
+			log.setLoginBrowser(request.getHeader("User-Agent"));
+			log.setParamJson(params.toString());
+			log.setResultJson(JacksonUtils.toJson(result));
+			log.setResultFlag(result.isSuccess());
+			log.setCreateUserId(loginUser.getId());
 			// 数据库持久化记录
-			// logOutServiceCustomer.saveOpeLog(userJson, JacksonUtils.toJson(param));
+			opeLogService.saveOpeLog(log);
 		}  catch (Exception e) {
 			//记录本地异常日志
 			e.printStackTrace();
@@ -103,7 +113,7 @@ public class LogAspect {
 		return map;
 	}
 	/**
-	 * 获取对象的真实IP地址
+	 * 获取对象的真实IP地址，如果使用nginx代理，直接获取的ip为nginx服务器的ip，使用以下程序可以获取到用户真是
 	 *
 	 */
 	public  String getIpAddress(HttpServletRequest request) {

@@ -26,23 +26,23 @@
 		</javaTypeResolver>
 
 		<!-- 数据表对应的bean层   -->
-		<javaModelGenerator targetPackage="com.gyh.bean" targetProject="mySsm">
+		<javaModelGenerator targetPackage="com.gyh.bean" targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 			<property name="trimStrings" value="true" />
 		</javaModelGenerator>
 
 		<!-- sql mapper 隐射配置文件   -->
-		<sqlMapGenerator targetPackage="com.gyh.mapper"	targetProject="mySsm">
+		<sqlMapGenerator targetPackage="mapper"	targetProject="src/main/resources">
 			<property name="enableSubPackages" value="true" />
 		</sqlMapGenerator>
 
 		<!-- 在ibatis2 中是dao层，但在mybatis3中，其实就是mapper接口 -->
-		<javaClientGenerator type="XMLMAPPER" targetPackage="com.gyh.mapper" targetProject="mySsm">
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.gyh.mapper" targetProject="src/main/java">
 			<property name="enableSubPackages" value="true" />
 		</javaClientGenerator>
 		
 		<!-- table -->		
-		<table tableName="t_user">
+		<table tableName="t_ope_logs">
 			<generatedKey column="id" sqlStatement="MySql" identity="true" />
 		</table>
 	</context>
