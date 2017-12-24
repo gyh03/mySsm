@@ -74,7 +74,6 @@ public class LoginController {
 					String loginUserID="loginUserId_"+user.getId()+"";
 					String userToken= IDGenerator.getUUID();
 
-					System.out.println(redisSingle+"<<<<<<<<<<<<");
 					/*redisSingle.opsForValue().set(userToken, JacksonUtils.toJson(user),1200, TimeUnit.SECONDS);
 					redisSingle.opsForValue().set(loginUserID, userToken,1200, TimeUnit.SECONDS);*/
 					redisCluster.set(userToken, JacksonUtils.toJson(user));
@@ -103,7 +102,7 @@ public class LoginController {
 	}
 
 	@ResponseBody
-	@RequestMapping("/onlineUsers")
+	@RequestMapping(value = "/onlineUsers",method = RequestMethod.GET)
 	public MessageResult onlineUsers(){
 		MessageResult result = new MessageResult();
 
@@ -129,7 +128,7 @@ public class LoginController {
 		redisCluster.del(OnlineUsers);
 		for (int i = 0; i <onlineUserIds.size() ; i++) {
 			userId = onlineUserIds.get(i);
-			redisCluster.rpush(userId,userMap.get(userId));
+			redisCluster.rpush(OnlineUsers,userId);
 		}
 		result.setSuccess(true);
 		result.setData(onlineUsers);
