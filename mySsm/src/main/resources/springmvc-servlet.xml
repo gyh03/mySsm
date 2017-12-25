@@ -34,9 +34,14 @@
 	</mvc:annotation-driven>
 
 	<!-- 拦截器配置 -->
-	<!-- <mvc:interceptors> 多个拦截器，顺序执行 <mvc:interceptor> <mvc:mapping path="/**"/> 
-		登录过滤 <bean class="com.gyh.common.inteceptor.LoginInterceptor"></bean> </mvc:interceptor> 
-		</mvc:interceptors> -->
+	 <mvc:interceptors>
+		<!-- 多个拦截器，顺序执行 -->
+		 <mvc:interceptor>
+			 <mvc:mapping path="/**"/>
+			 <!--登录过滤-->
+			 <bean class="com.gyh.common.inteceptor.LoginInterceptor"></bean>
+		 </mvc:interceptor>
+	 </mvc:interceptors>
 
 	<!-- 文件上传 需要使用到的配置 -->
 	<bean id="multipartResolver"
