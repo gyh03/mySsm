@@ -43,7 +43,7 @@ public class BindingResultCheack {
 				}*/
 				bindingError.add(bean);
 			}
-			result.setMsg(MessageCode.bindingError.getName());
+			result.setMsg(MessageCode.bindingError.getMsg());
 			result.setSuccess(MessageCode.bindingError.getFlag());
 			result.setBindingSuccess(MessageCode.bindingError.getFlag());
 			result.setCode(MessageCode.bindingError.getCode());

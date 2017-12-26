@@ -3,6 +3,7 @@ package com.gyh.aspect;
 import com.gyh.bean.TOpeLogs;
 import com.gyh.bean.TUser;
 import com.gyh.common.pojo.MessageResult;
+import com.gyh.common.utils.LoginUtils;
 import com.gyh.service.OpeLogService;
 import com.gyh.utils.json.JacksonUtils;
 import org.apache.log4j.Logger;
@@ -77,7 +78,7 @@ public class LogAspect {
 			if(annotation.get("node") !=null){
 				log.setNode(annotation.get("node").toString());
 			}
-			log.setLoginIp(getIpAddress(request));
+			log.setLoginIp(LoginUtils.getIpAddress());
 			log.setLoginBrowser(request.getHeader("User-Agent"));
 			log.setParamJson(params.toString());
 			log.setResultJson(JacksonUtils.toJson(result));
@@ -112,31 +113,6 @@ public class LogAspect {
 		map.put("node", ope.node());
 		return map;
 	}
-	/**
-	 * 获取对象的真实IP地址，如果使用nginx代理，直接获取的ip为nginx服务器的ip，使用以下程序可以获取到用户真是
-	 *
-	 */
-	public  String getIpAddress(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_X_REAL_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_CLIENT_IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		return ip;
-	}
+
 
 }

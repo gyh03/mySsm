@@ -1,23 +1,20 @@
 package com.gyh.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.gyh.bean.TUser;
-import com.gyh.common.inteceptor.SkipAuthCheck;
+import com.gyh.common.inteceptor.SkipLoginCheck;
 import com.gyh.common.pojo.MessageCode;
 import com.gyh.common.pojo.MessageResult;
 import com.gyh.exception.InvalidCustomException;
@@ -30,8 +27,6 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;	
-	/*	@Autowired
-	private RedisClientTemplate redisClientTemplate;*/	
 	/*@Autowired
 	@Qualifier("mongoTemplate")
 	protected MongoTemplate mongoTemplate;*/
@@ -50,7 +45,7 @@ public class UserController {
 			long id  = userService.insertUser(user);
 			if(id > 0){
 				result.setSuccess(MessageCode.success.getFlag());
-				result.setMsg(MessageCode.success.getName());
+				result.setMsg(MessageCode.success.getMsg());
 				result.setCode(MessageCode.success.getCode());
 			}
 			result.setData(id);
@@ -79,7 +74,7 @@ public class UserController {
 			Integer update = userService.updateUser(user);
 			if(update != null && update > 0){
 				result.setSuccess(MessageCode.success.getFlag());
-				result.setMsg(MessageCode.success.getName());
+				result.setMsg(MessageCode.success.getMsg());
 				result.setCode(MessageCode.success.getCode());
 			}
 			result.setData(update);
@@ -95,7 +90,7 @@ public class UserController {
     public Object deleteUser(@PathVariable("id")Integer id){
 		MessageResult result = new MessageResult();
 		result.setSuccess(MessageCode.fail.getFlag());
-		result.setMsg(MessageCode.fail.getName());
+		result.setMsg(MessageCode.fail.getMsg());
 		result.setCode(MessageCode.fail.getCode());
 		try {
 			if(id == null){
@@ -104,7 +99,7 @@ public class UserController {
 			Integer del = userService.deleteUserById(id);
 			if(del != null && del > 0){
 				result.setSuccess(MessageCode.success.getFlag());
-				result.setMsg(MessageCode.success.getName());
+				result.setMsg(MessageCode.success.getMsg());
 				result.setCode(MessageCode.success.getCode());
 			}
 			result.setData(del);
@@ -119,7 +114,7 @@ public class UserController {
     public Object getUser(@PathVariable("id")Integer id){
 		MessageResult result = new MessageResult();
 		result.setSuccess(MessageCode.fail.getFlag());
-		result.setMsg(MessageCode.fail.getName());
+		result.setMsg(MessageCode.fail.getMsg());
 		result.setCode(MessageCode.fail.getCode());
 		try {
 			if(id == null){
@@ -127,7 +122,7 @@ public class UserController {
 			}
 			TUser user = userService.queryUserById(id);
 			result.setSuccess(MessageCode.success.getFlag());
-			result.setMsg(MessageCode.success.getName());
+			result.setMsg(MessageCode.success.getMsg());
 			result.setCode(MessageCode.success.getCode());
 			result.setData(user);
 		} catch (Exception e) {
@@ -147,7 +142,7 @@ public class UserController {
 		return result;
 	}*/
 
-	@SkipAuthCheck
+	@SkipLoginCheck
 	@ResponseBody //ResponseBody返回json
 	@RequestMapping("/testJson")
 	public Object testJson(String name,int age){

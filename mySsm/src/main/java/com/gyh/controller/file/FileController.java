@@ -95,12 +95,12 @@ public class FileController {
 			fileService.insertFiles(tfiles);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new InvalidCustomException(MessageCode.uploadError.getName()+":"+e.getMessage());
+			throw new InvalidCustomException(MessageCode.uploadError.getMsg()+":"+e.getMessage());
 		}
 		long t2 = System.currentTimeMillis();
 		result.setCode(MessageCode.uploadSuccess.getCode());
 		result.setSuccess(MessageCode.uploadSuccess.getFlag());
-		result.setMsg(MessageCode.uploadSuccess.getName());
+		result.setMsg(MessageCode.uploadSuccess.getMsg());
 		result.setData((t2-t1));
 		return result; 
 	}
@@ -162,12 +162,12 @@ public class FileController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new InvalidCustomException(MessageCode.uploadError.getName()+":"+e.getMessage());
+			throw new InvalidCustomException(MessageCode.uploadError.getMsg()+":"+e.getMessage());
 		}
 		long  endTime=System.currentTimeMillis();
 		result.setCode(MessageCode.uploadSuccess.getCode());
 		result.setSuccess(MessageCode.uploadSuccess.getFlag());
-		result.setMsg(MessageCode.uploadSuccess.getName());
+		result.setMsg(MessageCode.uploadSuccess.getMsg());
 		result.setData((endTime - startTime));
 		return result; 
 	}

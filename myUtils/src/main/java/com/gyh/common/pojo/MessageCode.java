@@ -8,16 +8,17 @@ public enum MessageCode {
 	bindingError(false,"数据绑定失败",3100),
 	bindingSuccess(true,"数据绑定成功",2100),
 	uploadError(false,"上传失败",3200),
-	uploadSuccess(true,"上传成功",2200)
+	uploadSuccess(true,"上传成功",2200),
+	noLogin(false,"未登录",3300)
     ;
 
-	private String name;
+	private String msg;
 	private Boolean flag;
 	private Integer  code;
 
-	private MessageCode( Boolean flag,String name, Integer code) {
+	private MessageCode( Boolean flag,String msg, Integer code) {
 		this.flag = flag;
-		this.name = name;
+		this.msg = msg;
 		this.code = code;
 	}
 
@@ -29,12 +30,12 @@ public enum MessageCode {
 		this.flag = flag;
 	}
 
-	public String getName() {
-		return name;
+	public String getMsg() {
+		return msg;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 
 	public Integer getCode() {
