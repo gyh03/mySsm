@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2017-12-22 22:52:33
+Date: 2017-12-24 15:07:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,6 +29,24 @@ CREATE TABLE `t_file` (
   `createtime` datetime DEFAULT NULL COMMENT '上传时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Table structure for t_ope_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `t_ope_logs`;
+CREATE TABLE `t_ope_logs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ope_type` varchar(255) DEFAULT NULL COMMENT '操纵类型',
+  `node` varchar(255) DEFAULT NULL COMMENT '操作对象',
+  `result_flag` tinyint(1) DEFAULT NULL COMMENT '操作结果：0失败，1成功',
+  `param_json` varchar(1000) DEFAULT NULL COMMENT '参数',
+  `result_json` varchar(1000) DEFAULT NULL COMMENT '结果',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `create_user_id` int(11) DEFAULT NULL COMMENT '创建人',
+  `login_ip` varchar(255) DEFAULT NULL COMMENT '用户ip',
+  `login_browser` varchar(255) DEFAULT NULL COMMENT '用户浏览器',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for t_user
