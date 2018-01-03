@@ -66,6 +66,9 @@ public class LoginInterceptor implements HandlerInterceptor{
 			 简单点说我们可以通过这个类对象获得被调用方法的各种信息，如方法名、参数类型等
 		 */
 		if(handler.getClass().isAssignableFrom(HandlerMethod.class)) {
+			//转码
+			request.setCharacterEncoding("utf-8");
+			response.setContentType("text/html;charset=UTF-8");
 			Method method = ((HandlerMethod) handler).getMethod();
 			//获得注解对象
 			SkipLoginCheck skipLoginCheck = ((HandlerMethod) handler).getMethodAnnotation(SkipLoginCheck.class);
