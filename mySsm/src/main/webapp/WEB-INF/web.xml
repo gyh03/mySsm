@@ -49,6 +49,22 @@
 		<servlet-name>SpringMVC</servlet-name>
 	</filter-mapping>
 
+	<filter>
+		<filter-name>baseAuthorizedFilter</filter-name>
+		<filter-class>com.gyh.common.filter.BaseFilter</filter-class>
+		<init-param>
+			<param-name>noAuthorized</param-name>
+			<param-value>
+				/**/some.html,
+				/**/loginController/login
+			</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>baseAuthorizedFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 
 	<!-- Spring监听器 -->
 	<listener>
