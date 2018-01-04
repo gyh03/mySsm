@@ -9,6 +9,7 @@ spring springmvc mybatis整合demo，以及常用技术与spring的整合。
 6、使用spring mvc 的CommonsMultipartResolver进行上传文件，比普通的流操作更加简单，迅速。</br>
 7、使用动态盐值加密防登录。</br>
 8、使用拦截器拦截未登录用户，使用自定义注解跳过不需要拦截登录的接口。</br>
+9、使用过滤器记录方法执行时间，以便定位耗时方法。</br>
 n、项目有两种redis配置方式：单机版redis配置redis-single.xml，使用StringRedisTemplate对象操作；集群模式redis配置redis-cluster.xml，使用JedisCluster对象操作。切换两种配置模式，只需在spring-other.xml中开启或注释引用的配置文件即可，推荐使用集群方式，JedisCluster操作更简单。</br>
 
 </br>
