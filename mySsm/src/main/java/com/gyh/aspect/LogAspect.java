@@ -3,6 +3,7 @@ package com.gyh.aspect;
 import com.gyh.bean.TOpeLogs;
 import com.gyh.bean.TUser;
 import com.gyh.common.pojo.MessageResult;
+import com.gyh.common.utils.BrowseUtils;
 import com.gyh.common.utils.LoginUtils;
 import com.gyh.service.OpeLogService;
 import com.gyh.utils.json.JacksonUtils;
@@ -63,7 +64,7 @@ public class LogAspect {
 					continue;
 				}
 				try {
-					params.append("第").append(i).append("个参数：").append(JacksonUtils.toJson(joinPoint.getArgs()[i])).append("；");
+					params.append("param").append(i).append("：").append(JacksonUtils.toJson(joinPoint.getArgs()[i])).append("；");
 				} catch (Exception e) {
 					continue;
 				}
@@ -79,11 +80,11 @@ public class LogAspect {
 				log.setNode(annotation.get("node").toString());
 			}
 			log.setLoginIp(LoginUtils.getIpAddress());
-			log.setLoginBrowser(request.getHeader("User-Agent"));
+			log.setLoginBrowser(BrowseUtils.getUserAgent());
 			log.setParamJson(params.toString());
 			log.setResultJson(JacksonUtils.toJson(result));
 			log.setResultFlag(result.isSuccess());
-			log.setCreateUserId(loginUser.getId());
+			log.setCreateUserId((loginUser == null ? -1 : loginUser.getId()));
 			// 数据库持久化记录
 			opeLogService.saveOpeLog(log);
 		}  catch (Exception e) {

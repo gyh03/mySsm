@@ -5,6 +5,7 @@ import com.gyh.bean.TUser;
 import com.gyh.common.constant.CommonConstant;
 import com.gyh.common.inteceptor.SkipLoginCheck;
 import com.gyh.common.pojo.MessageResult;
+import com.gyh.common.utils.CookiesUtils;
 import com.gyh.common.utils.LoginUtils;
 import com.gyh.service.UserService;
 import com.gyh.utils.IDGenerator;
@@ -23,6 +24,7 @@ import redis.clients.jedis.JedisCluster;
 import sun.rmi.runtime.Log;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -84,7 +86,7 @@ public class LoginController {
 	@ResponseBody
 	@RequestMapping(value = "/dologin",method = RequestMethod.POST)
 	@OpeLogInfo(node = "用户登录")
-	public MessageResult dologin(HttpServletRequest request,String userName,String password){
+	public MessageResult dologin(HttpServletRequest request, HttpServletResponse response, String userName, String password){
 		MessageResult result = new MessageResult();
 		result.setSuccess(false);
 		if(StringUtils.isEmpty(userName)){
@@ -117,6 +119,7 @@ public class LoginController {
 					//记录在线用户
 					redisCluster.rpush(CommonConstant.OnlineUsers,loginUserID);
 					request.getSession().setAttribute(CommonConstant.loginUserToken,user);
+					CookiesUtils.makeCookieLife(request,response,CommonConstant.loginUserToken,userToken,"/",1200);
 					result.setData(userToken);
 					result.setMsg("success");
 					result.setOther(user);

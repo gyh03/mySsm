@@ -18,8 +18,7 @@
 	<mvc:annotation-driven>
 		<!-- 处理responseBody 里面日期类型 -->
 		<mvc:message-converters>
-			<bean
-				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
 				<property name="objectMapper">
 					<bean class="com.fasterxml.jackson.databind.ObjectMapper">
 						<property name="dateFormat">
@@ -50,7 +49,17 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
+	<!-- 声明自动为spring容器中那些配置@aspectJ切面的bean创建代理，织入切面 -->
 	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+	<!-- 方法计时器 -->
+	<aop:config>
+		<!--切入点-->
+		<aop:pointcut id="methodPoint" expression="execution(*  com.gyh.controller.*.*(..) ) ||  execution(*  com.gyh.service.impl.*.*(..)) "/>
+		<!--在该切入点使用自定义拦截器-->
+		<aop:advisor pointcut-ref="methodPoint" advice-ref="excuteTimeMonitor"/>
+	</aop:config>
+
 
 	<!-- 视图解析器 -->
 	<bean id="viewResolver"
