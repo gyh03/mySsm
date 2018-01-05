@@ -34,15 +34,9 @@ public class LoginUtils {
         HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String cookieToken = null;
         //获取用户cookie中的用户登录令牌;//TODO 如果令牌加密，防止丢失被人冒用
-        Cookie[] cookie = request.getCookies();
-        if(cookie != null && cookie.length > 0){
-            for (int i = 0; i < cookie.length; i++) {
-                Cookie cook = cookie[i];
-                if (cook.getName().equals(CommonConstant.loginUserToken)) {
-                    cookieToken = cook.getValue().toString();
-                    break;
-                }
-            }
+        Cookie cook = CookiesUtils.getCookieByName(request,CommonConstant.loginUserToken);
+        if (cook != null) {
+            cookieToken = cook.getValue().toString();
         }
         return cookieToken;
     }

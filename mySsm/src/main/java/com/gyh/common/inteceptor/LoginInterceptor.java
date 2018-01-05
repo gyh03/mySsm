@@ -4,8 +4,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.gyh.bean.TUser;
+import com.gyh.common.constant.CommonConstant;
 import com.gyh.common.pojo.MessageCode;
 import com.gyh.common.pojo.MessageResult;
+import com.gyh.common.utils.CookiesUtils;
 import com.gyh.common.utils.LoginUtils;
 import com.gyh.common.utils.WriteUtils;
 import com.gyh.utils.json.JacksonUtils;
@@ -58,6 +60,8 @@ public class LoginInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {
 		MessageResult result = new MessageResult();
+		String sessionId = request.getSession().getId();
+		System.out.println(">>>>>>>>>>>>"+sessionId);
 		/**
 		    1、Class.isAssignableFrom()作用与instanceof相似，
 			 前者是用来判断一个类Class1和另一个类Class2是否相同或是另一个类的子类或接口
