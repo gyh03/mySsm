@@ -10,6 +10,7 @@ import com.gyh.common.pojo.MessageResult;
 import com.gyh.common.utils.CookiesUtils;
 import com.gyh.common.utils.LoginUtils;
 import com.gyh.common.utils.WriteUtils;
+import com.gyh.utils.encrypt.MD5Util;
 import com.gyh.utils.json.JacksonUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpRequest;
@@ -60,8 +61,6 @@ public class LoginInterceptor implements HandlerInterceptor{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
 			Object handler) throws Exception {
 		MessageResult result = new MessageResult();
-		String sessionId = request.getSession().getId();
-		System.out.println(">>>>>>>>>>>>"+sessionId);
 		/**
 		    1、Class.isAssignableFrom()作用与instanceof相似，
 			 前者是用来判断一个类Class1和另一个类Class2是否相同或是另一个类的子类或接口
@@ -86,7 +85,10 @@ public class LoginInterceptor implements HandlerInterceptor{
 					noLoginWrite(result,response);
 					return false;
 				}
-				String userJson = redisCluster.get(cookieToken);
+				//拼接sessionId，防止单独使用cookie中的用户令牌被别人得到后，造成危险，sessionId是用户浏览器与服务器的会话id，不同的会话id不同
+				String sessionId = request.getSession().getId();
+				String redisToken = MD5Util.string2MD5(sessionId + cookieToken);
+				String userJson = redisCluster.get(redisToken);
 				if(StringUtils.isBlank(userJson)){
 					noLoginWrite(result,response);
 					return false;

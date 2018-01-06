@@ -114,8 +114,12 @@ public class LoginController {
 					}
 					/*redisSingle.opsForValue().set(userToken, JacksonUtils.toJson(user),1200, TimeUnit.SECONDS);
 					redisSingle.opsForValue().set(loginUserID, userToken,1200, TimeUnit.SECONDS);*/
-					redisCluster.setex(userToken,1200, JacksonUtils.toJson(user));
-					redisCluster.setex(loginUserID,1200,userToken);
+					//用户sessionid拼接userToken当作redisToken值存到redis中，防止其他人获取用户userToken后在别处登陆，相当于加密了用户登录令牌
+					//判断用户是否登录时，获取用户sessionId和cookie中的userToken拼接得到redisToken，然后去redis中验证。
+					String sessionId = request.getSession().getId();
+					String redisToken = MD5Util.convertMD5(sessionId+userToken);
+					redisCluster.setex(redisToken,1200, JacksonUtils.toJson(user));
+					redisCluster.setex(loginUserID,1200,redisToken);
 					//记录在线用户
 					redisCluster.rpush(CommonConstant.OnlineUsers,loginUserID);
 					request.getSession().setAttribute(CommonConstant.loginUserToken,user);
@@ -145,14 +149,16 @@ public class LoginController {
 	@ResponseBody
 	@RequestMapping(value = "/logout",method = RequestMethod.POST)
 	@OpeLogInfo(node = "用户退出登录")
-	public MessageResult logout(){
+	public MessageResult logout(HttpServletRequest request){
 		MessageResult result = new MessageResult();
-		String cookieToken = LoginUtils.getUserCookieToken();
-		if(StringUtils.isNotBlank(cookieToken)){
+		String sessionId = request.getSession().getId();
+		String userToken = LoginUtils.getUserCookieToken();
+		if(StringUtils.isNotBlank(userToken)){
+			String redisToken = MD5Util.string2MD5(sessionId + userToken);
 			//删除登录用户信息
-			redisCluster.del(cookieToken);
+			redisCluster.del(redisToken);
 			//从在线列表删除用户
-			redisCluster.lrem(CommonConstant.OnlineUsers,0,cookieToken);
+			redisCluster.lrem(CommonConstant.OnlineUsers,0,redisToken);
 			TUser loginUser = LoginUtils.getLoginUser();
 			if(loginUser != null){
 				redisCluster.del(CommonConstant.reidsLoginUserId + loginUser.getId());

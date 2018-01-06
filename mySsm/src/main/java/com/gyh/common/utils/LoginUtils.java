@@ -33,7 +33,7 @@ public class LoginUtils {
     public static String getUserCookieToken(){
         HttpServletRequest  request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String cookieToken = null;
-        //获取用户cookie中的用户登录令牌;//TODO 如果令牌加密，防止丢失被人冒用
+        //获取用户cookie中的用户登录令牌;
         Cookie cook = CookiesUtils.getCookieByName(request,CommonConstant.loginUserToken);
         if (cook != null) {
             cookieToken = cook.getValue().toString();
