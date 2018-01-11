@@ -1,19 +1,37 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : local
-Source Server Version : 50520
+Source Server         : localhost
+Source Server Version : 50717
 Source Host           : localhost:3306
 Source Database       : myssm
 
 Target Server Type    : MYSQL
-Target Server Version : 50520
+Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2017-12-24 15:07:10
+Date: 2018-01-11 21:12:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for t_database
+-- ----------------------------
+DROP TABLE IF EXISTS `t_database`;
+CREATE TABLE `t_database` (
+  `id` varchar(64) NOT NULL COMMENT '主键',
+  `delflag` varchar(32) DEFAULT NULL COMMENT '逻辑删除标识（0：正常；1：删除）',
+  `name` varchar(50) DEFAULT NULL COMMENT '数据库名称',
+  `code` varchar(50) DEFAULT NULL COMMENT '数据库编码',
+  `account` varchar(50) DEFAULT NULL COMMENT '数据库用户名',
+  `password` varchar(50) DEFAULT NULL COMMENT '密码',
+  `port` int(11) DEFAULT NULL COMMENT '端口号',
+  `remark` varchar(2000) DEFAULT NULL COMMENT '备注',
+  `driver_name` varchar(30) DEFAULT NULL,
+  `url` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据库';
 
 -- ----------------------------
 -- Table structure for t_file
@@ -28,7 +46,7 @@ CREATE TABLE `t_file` (
   `url` varchar(500) DEFAULT NULL COMMENT '访问url',
   `createtime` datetime DEFAULT NULL COMMENT '上传时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for t_ope_logs
@@ -46,7 +64,7 @@ CREATE TABLE `t_ope_logs` (
   `login_ip` varchar(255) DEFAULT NULL COMMENT '用户ip',
   `login_browser` varchar(255) DEFAULT NULL COMMENT '用户浏览器',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
 
 -- ----------------------------
 -- Table structure for t_user
@@ -64,4 +82,4 @@ CREATE TABLE `t_user` (
   `createtime` timestamp NULL DEFAULT NULL COMMENT '创建时间',
   `delfalg` tinyint(1) DEFAULT '0' COMMENT '是否删除，0否，1是',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
